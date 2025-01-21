@@ -9,3 +9,5 @@ print ("ovi")
 print ("am audagt aceasta linie de pe branch ovi_implementare")
 
 print("de pe online")
+
+print("modificare 2 de pe online")
