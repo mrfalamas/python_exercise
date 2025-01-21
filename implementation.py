@@ -2,6 +2,10 @@ print('hello world')
 
 print('hello romania')
 
+
+print('-------------------------------------------------------------')
+
+
 print ("marian")
 
 print ("ovi")
