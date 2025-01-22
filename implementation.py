@@ -9,8 +9,16 @@ def suma(a, b):
     print('Suma este: ' + str(sum))
     return sum
 
+def produs(a,b):
+    prod = a * b
+    print('Produsul este: ' + str(prod))
+    return prod
+
 def main():
     #call function in main
+    produs(ovi, darius)
     suma(ovi, darius)
+
     
-if __name__ == "__main__": main()    
+if __name__ == "__main__": 
+    main()    
