@@ -14,10 +14,19 @@ def produs(a,b):
     print('Produsul este: ' + str(prod))
     return prod
 
+def impartire(a,b):
+    if b != 0:
+        rez = a / b
+        print('Impartirea este: ' + str(rez))
+        return rez
+    else:
+        print('Eroare: Impartirea la 0 nu este permisa')
+
 def main():
     #call function in main
     produs(ovi, darius)
     suma(ovi, darius)
+    impartire(ovi, darius)
 
     
 if __name__ == "__main__": 
