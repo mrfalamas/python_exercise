@@ -9,6 +9,9 @@ def suma(a, b):
     print('Suma este: ' + str(sum))
     return sum
 
+def sub(a, b):
+    return abs(a - b)
+
 def produs(a,b):
     prod = a * b
     print('Produsul este: ' + str(prod))
@@ -28,6 +31,8 @@ def main():
     suma(ovi, darius)
     impartire(ovi, darius)
 
-    
+    diff = sub(ovi, darius)
+    print('Diff is: ' + str(diff))
+     
 if __name__ == "__main__": 
     main()    
