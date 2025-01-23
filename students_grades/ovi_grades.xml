@@ -1,0 +1,14 @@
+<students>
+    <student>
+        <name>Liam</name>
+        <grades>80, 85, 90</grades>
+    </student>
+    <student>
+        <name>Noah</name>
+        <grades>78, 82</grades>
+    </student>
+    <student>
+        <name>Ava</name>
+        <grades>92, 88, 85, 56</grades>
+    </student>
+</students>
