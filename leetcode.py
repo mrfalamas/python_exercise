@@ -29,5 +29,21 @@ def validate_paranthesis(in_str):
 inp_str = "([])"
 
 
+def mergetwolists(list1, list2):
+
+    for elem in list2:
+        list1.append(elem)
+
+    for i in range(len(list1)):
+        for j in range(len(list1) - i -1):
+            if list1[j] > list1[j+1]:
+                list1[j],list1[j+1] = list1[j+1], list1[j]
+
+    return list1
 
 
+l1 = [1, 3, 4]
+
+l2 = [3, 1, 2]
+
+print(mergetwolists(l1, l2))
