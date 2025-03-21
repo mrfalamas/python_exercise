@@ -26,7 +26,7 @@ def validate_paranthesis(in_str):
     else:
         return False
 
-inp_str = "([])"
+#print(validate_paranthesis("([])"))
 
 
 def mergetwolists(list1, list2):
@@ -41,9 +41,87 @@ def mergetwolists(list1, list2):
 
     return list1
 
-
 l1 = [1, 3, 4]
 
 l2 = [3, 1, 2]
 
-print(mergetwolists(l1, l2))
+#print(mergetwolists(l1, l2))
+
+
+def ret_id(inp):
+
+    lst = {1,3,3,4,5,6,6,7,8,9,9}
+
+    for i, elem in enumerate(lst):
+        if elem == inp:
+            temp.append(i)
+
+    return temp
+
+#print(ret_id(3))
+
+
+def remove_duplicates(lst):
+    t = len(lst)
+
+    unique_lst = []
+
+    for elem in lst:
+        if elem not in unique_lst:
+            unique_lst.append(elem)
+
+    list_digits = unique_lst
+
+    digits = len(list_digits)
+
+    msg = str(digits) + ", nums = " + ''.join(str(list_digits))
+
+    return msg
+
+#print(remove_duplicates([0,0,3,3,3,3,3,3,4]))
+
+
+def ret_occ(ac, paie):
+    if ac in paie:
+        print('ok') 
+
+    print(paie.find(ac))
+
+
+#print(ret_occ("bad","sadbutsad"))
+
+def ret_word(inp):
+    new_lst = inp.split(" ")
+    print(new_lst)
+    new_lst2 = []
+    for elem in new_lst:
+        if elem:
+            new_lst2.append(elem)
+    return new_lst2[len(new_lst2) - 1]
+
+
+# print(ret_word("   fly me   to   the moon  "))
+
+
+def ret_sum(a, b):
+
+    a_int = 0
+    b_int = 0
+
+    for i, let in enumerate(a):
+        if let == '1':
+            a_int = a_int + pow(2,i)
+
+    for j, let in enumerate(b):
+        if let == '1':
+            b_int = b_int + pow(2,j)
+
+
+    c_int = a_int + b_int
+    sum = bin(c_int)
+
+    sum = sum.replace('0b', '')
+
+    return sum
+
+# print(ret_sum("1010","1011"))
