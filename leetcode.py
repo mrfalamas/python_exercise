@@ -51,6 +51,7 @@ l2 = [3, 1, 2]
 def ret_id(inp):
 
     lst = {1,3,3,4,5,6,6,7,8,9,9}
+    temp = []
 
     for i, elem in enumerate(lst):
         if elem == inp:
@@ -83,7 +84,7 @@ def remove_duplicates(lst):
 
 def ret_occ(ac, paie):
     if ac in paie:
-        print('ok') 
+        print('ok')
 
     print(paie.find(ac))
 
@@ -125,3 +126,52 @@ def ret_sum(a, b):
     return sum
 
 # print(ret_sum("1010","1011"))
+
+class Animal():
+
+    def give_value(self):
+        self.ovi = "3"
+
+    def sumar(self, a, b):
+        self.suma = a + b
+        print(self.ovi)
+
+    def __init__(self):
+        self.name = "Cuchi"
+        self.age = "1"
+        self.give_value()
+        self.sumar(4,5)
+
+class Dog(Animal):
+
+    def new_name(self):
+        self.name = "marcel"
+        self.age = "13"
+
+    def Bark(self):
+        return("ham ham, dog is barking")
+
+def check_bit(nr, bit_nr):
+    mask = pow(2,bit_nr)
+    res = nr & mask
+
+    if res == mask:
+        return True
+    else:
+        return False
+
+def check_sing_bit(nr):
+    if nr in [1, 2, 4, 8]:
+        return True
+    else:
+        return False
+
+list = [3,8,1,5,7]
+maxis = 0
+
+for elem in list:
+    if elem > maxis:
+        maxis = elem
+print(maxis)
+
+print(max(list))
