@@ -135,8 +135,11 @@ def create_report(type):
 
 def main():
     arg = sys.argv
-    print("Calling python script with: " + arg[1])
-    create_report(arg[1])
+    if arg[1] == 'none':
+        print("Please select a valid option from Build Parameters")
+    else:
+        print("Calling python script with: " + arg[1])
+        create_report(arg[1])
 
 if __name__ == "__main__":
     main()
