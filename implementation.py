@@ -6,6 +6,7 @@ import json
 import xml.etree.ElementTree as ET
 from datetime import datetime
 import sys
+import os.path
 
 main_dict = {}
 
@@ -136,9 +137,9 @@ def create_report(type):
 def main():
     arg = sys.argv
     if arg[1] == 'none':
-        print("Please select a valid option from Build Parameters")
+        print("please select a valid option from build parameters")
     else:
-        print("Calling python script with: " + arg[1])
+        print("calling python script with: " + arg[1])
         create_report(arg[1])
 
 if __name__ == "__main__":
