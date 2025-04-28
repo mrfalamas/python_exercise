@@ -10,8 +10,20 @@ import os.path
 
 main_dict = {}
 
+
+def append_from_json(gr_dir):
+    json_file = os.path.join(gr_dir, "01_review_test_spec.json")
+    with open(json_file, 'r') as file:
+        data = json.load(file)
+
+    for key in data:
+        person = key
+        if person not in main_dict.keys():
+            main_dict[person] = data[key]
+
+
 def append_from_txt(gr_dir):
-    txt_file = os.path.join(gr_dir, "ovi_grades.txt")
+    txt_file = os.path.join(gr_dir, "02_review_test_impl.txt")
     f = open(txt_file, "r")
     for line in f:
         person = line.split(':')[0]
@@ -25,32 +37,9 @@ def append_from_txt(gr_dir):
             main_dict[person].append(int(gr))
     return None
 
-def append_from_xls(gr_dir):
-    xls_file = os.path.join(gr_dir, "ovi_grades.xlsx")
-    data = pd.read_excel(xls_file, header=None, index_col=None)
-
-    for row in data.iterrows():
-        for i, elem in enumerate(row[1]):
-            if i == 0:
-                person = elem
-                if person not in main_dict.keys():
-                    main_dict[person] = []
-            else:
-                if not(math.isnan(elem)):
-                    main_dict[person].append(int(elem))
-
-def append_from_json(gr_dir):
-    json_file = os.path.join(gr_dir, "ovi_grades.json")
-    with open(json_file, 'r') as file:
-        data = json.load(file)
-
-    for key in data:
-        person = key
-        if person not in main_dict.keys():
-            main_dict[person] = data[key]
 
 def append_from_xml(gr_dir):
-    xml_file = os.path.join(gr_dir, "ovi_grades.xml")
+    xml_file = os.path.join(gr_dir, "03_nonsafety_test.xml")
     tree = ET.parse(xml_file)
     students = tree.findall("student")
 
@@ -65,6 +54,20 @@ def append_from_xml(gr_dir):
         each_gr = grades.split(",")
         for gr in each_gr:
             main_dict[person].append(int(gr))
+
+def append_from_xls(gr_dir):
+    xls_file = os.path.join(gr_dir, "04_safety_test.xlsx")
+    data = pd.read_excel(xls_file, header=None, index_col=None)
+
+    for row in data.iterrows():
+        for i, elem in enumerate(row[1]):
+            if i == 0:
+                person = elem
+                if person not in main_dict.keys():
+                    main_dict[person] = []
+            else:
+                if not(math.isnan(elem)):
+                    main_dict[person].append(int(elem))
 
 def create_html(gr_dir, title):
     html_file = os.path.join(gr_dir, "output.html")
@@ -117,30 +120,31 @@ def create_html(gr_dir, title):
 
 def create_report(type):
     py_dir = os.path.dirname(os.path.abspath(__file__))
-    gr_dir = os.path.join(py_dir, "students_grades")
+    gr_dir = os.path.join(py_dir, "test_results")
 
     if type == "xml":
         append_from_xml(gr_dir)
-        title = "<h1>CATALOG based on XML</h1>"
+        title = "<h1>HTML Report based Non-Safety Tests - XML</h1>"
     if type == "xls":
         append_from_xls(gr_dir)
-        title = "<h1>CATALOG based on XLS</h1>"
+        title = "<h1>HTML Report based on Safety Tests - XLS</h1>"
     if type == "txt":
         append_from_txt(gr_dir)
-        title = "<h1>CATALOG based on TXT</h1>"
+        title = "<h1>HTML Report based on Review Test Implementation - TXT</h1>"
     if type == "json":
         append_from_json(gr_dir)
-        title = "<h1>CATALOG based on JSON</h1>"
+        title = "<h1>CHTML Report based on Review Test Specification - JSON</h1>"
 
     create_html(gr_dir, title)
 
 def main():
-    arg = sys.argv
-    if arg[1] == 'none':
-        print("please select a valid option from build parameters")
-    else:
-        print("calling python script with: " + arg[1])
-        create_report(arg[1])
+    # arg = sys.argv
+    # if arg[1] == 'none':
+    #     print("please select a valid option from build parameters")
+    # else:
+    #     print("calling python script with: " + arg[1])
+    #     create_report(arg[1])
+    create_report()
 
 if __name__ == "__main__":
     main()
