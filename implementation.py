@@ -10,7 +10,6 @@ import os.path
 
 main_dict = {}
 
-
 def append_from_json(gr_dir):
     json_file = os.path.join(gr_dir, "01_review_test_spec.json")
     with open(json_file, 'r') as file:
@@ -20,7 +19,6 @@ def append_from_json(gr_dir):
         person = key
         if person not in main_dict.keys():
             main_dict[person] = data[key]
-
 
 def append_from_txt(gr_dir):
     txt_file = os.path.join(gr_dir, "02_review_test_impl.txt")
@@ -35,8 +33,6 @@ def append_from_txt(gr_dir):
         splitgr = grades.split(',')
         for gr in splitgr:
             main_dict[person].append(int(gr))
-    return None
-
 
 def append_from_xml(gr_dir):
     xml_file = os.path.join(gr_dir, "03_nonsafety_test.xml")
@@ -69,45 +65,62 @@ def append_from_xls(gr_dir):
                 if not(math.isnan(elem)):
                     main_dict[person].append(int(elem))
 
-def create_html(gr_dir, title):
+def create_html(gr_dir, type):
     html_file = os.path.join(gr_dir, "output.html")
     file = open(html_file, "w")
 
-    for keys in main_dict:
-        no_rows = 0
-        if no_rows < len(main_dict[keys]):
-            no_rows = len(main_dict[keys])
+    html_dict = main_dict
 
-    rows = {}
-    rows[0] = []
-    for keys in main_dict:
-        rows[0].append(keys)
-    for i in range (1, no_rows+1):
-        rows[i] = []
-        for keys in main_dict:
-            try:
-                rows[i].append(main_dict[keys][i-1])
-            except:
-                rows[i].append(0)
+    if "01" in type or "02" in type:
+        for module in html_dict:
+            mod_checks = html_dict[module][0]
+            mod_opens = html_dict[module][1]
+            mod_fails = html_dict[module][2]
+            open_rate = mod_opens*100 / mod_checks
+            fail_rate = mod_fails*100 / mod_checks
+            html_dict[module].append(round(open_rate, 2))
+            html_dict[module].append(round(fail_rate, 2))
+    elif "03" in type or "04" in type:
+        html_dict = html_dict
 
     # Write HTML content
     file.write("<html>")
     file.write("<head>")
-    file.write("<title>CATALOG</title>")
+    file.write("<title>Test Results</title>")
     file.write("</head>")
     file.write("<body>")
-    file.write(title)
-    file.write("<p> </p>")
-    file.write("<h2>generated at " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "</h12>")
+    if "01" in type:
+        file.write("<h1>Review of Test Specification</h1>")
+        file.write("<p> </p>")
+        file.write("<h3>&rArr; readed from 01_test_specification.JSON</h3>")
+    if "02" in type:
+        file.write("<h1>Review of Test Implementation</h1>")
+        file.write("<p> </p>")
+        file.write("<h3>&rArr; readed from 02_test_implementation.TXT</h3>")
+    if "03" in type:
+        file.write("<h1>Non-Safety Tests (QM Requirements)</h1>")
+        file.write("<p> </p>")
+        file.write("<h3>&rArr; readed from 03_test_qm_requirements.XML</h3>")
+    if "04" in type:
+        file.write("<h1>Safety Tests (ASIL Requirements)</h1>")
+        file.write("<p> </p>")
+        file.write("<h3>&rArr; readed from 04_test_asil_requirements.XLSX</h3>")
+    file.write("<h3>&rArr; report generated at " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "</h3>")
     file.write("<p> </p>")
     file.write("<table style=\"border:1px solid black; border-collapse: collapse; \">")
-    for row in rows:
+    file.write("<tr style=\"border:1px solid black; \">")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Name</th>")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Checks</th>")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Open</th>")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Fails</th>")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Open Rate</th>")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Fail Rate</th>")
+    file.write("</tr>")
+    for row in html_dict:
         file.write("<tr style=\"border:1px solid black; \">")
-        for value in rows[row]:
-            if row == 0:
-                file.write("<th style=\"border:1px solid black; padding: 10px;\">" + str(value) + "</th>")
-            else:
-                file.write("<td style=\"border:1px solid black; padding: 10px;\">" + str(value) + "</td>")
+        file.write("<td style=\"border:1px solid black; padding: 10px;\">" + str(row) + "</td>")
+        for value in html_dict[row]:
+            file.write("<td style=\"border:1px solid black; padding: 10px; text-align: center;\">" + str(value) + "</td>")
         file.write("</tr>")
     file.write("</table>")
     file.write("</body>")
@@ -122,20 +135,16 @@ def create_report(type):
     py_dir = os.path.dirname(os.path.abspath(__file__))
     gr_dir = os.path.join(py_dir, "test_results")
 
-    if type == "xml":
-        append_from_xml(gr_dir)
-        title = "<h1>HTML Report based Non-Safety Tests - XML</h1>"
-    if type == "xls":
-        append_from_xls(gr_dir)
-        title = "<h1>HTML Report based on Safety Tests - XLS</h1>"
-    if type == "txt":
-        append_from_txt(gr_dir)
-        title = "<h1>HTML Report based on Review Test Implementation - TXT</h1>"
-    if type == "json":
+    if "01" in type:
         append_from_json(gr_dir)
-        title = "<h1>CHTML Report based on Review Test Specification - JSON</h1>"
+    if "02" in type:
+        append_from_txt(gr_dir)
+    if "03" in type:
+        append_from_xml(gr_dir)
+    if "04" in type:
+        append_from_xls(gr_dir)
 
-    create_html(gr_dir, title)
+    create_html(gr_dir, type)
 
 def main():
     # arg = sys.argv
@@ -144,7 +153,7 @@ def main():
     # else:
     #     print("calling python script with: " + arg[1])
     #     create_report(arg[1])
-    create_report()
+    create_report("01")
 
 if __name__ == "__main__":
     main()
