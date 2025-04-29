@@ -78,8 +78,10 @@ def create_html(gr_dir, type):
             mod_fails = html_dict[module][2]
             open_rate = mod_opens*100 / mod_checks
             fail_rate = mod_fails*100 / mod_checks
-            html_dict[module].append(round(open_rate, 2))
-            html_dict[module].append(round(fail_rate, 2))
+            status = "NOK" if open_rate > 0 or fail_rate > 0 else "OK"
+            html_dict[module].append(f'{open_rate:.2f}' + "%")
+            html_dict[module].append(f'{fail_rate:.2f}' + "%")
+            html_dict[module].append(status)
     elif "03" in type or "04" in type:
         html_dict = html_dict
 
@@ -113,14 +115,25 @@ def create_html(gr_dir, type):
     file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Checks</th>")
     file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Open</th>")
     file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Fails</th>")
-    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Open Rate</th>")
-    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center;\">Fail Rate</th>")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center; background-color: #d6eaf8;\">Open Rate</th>")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center; background-color: #fadbd8;\">Fail Rate</th>")
+    file.write("<th style=\"border:1px solid black; padding: 10px; text-align: center; \"><p>STATUS</th>")
     file.write("</tr>")
     for row in html_dict:
         file.write("<tr style=\"border:1px solid black; \">")
-        file.write("<td style=\"border:1px solid black; padding: 10px;\">" + str(row) + "</td>")
-        for value in html_dict[row]:
-            file.write("<td style=\"border:1px solid black; padding: 10px; text-align: center;\">" + str(value) + "</td>")
+        file.write("<td style=\"border:1px solid black; padding: 10px; \">" + str(row) + "</td>")
+        for i, value in enumerate(html_dict[row]):
+            if i == 3:
+                file.write("<td style=\"border:1px solid black; padding: 10px; text-align: center; background-color: #d6eaf8;\">" + str(value) + "</td>")
+            elif i == 4:
+                file.write("<td style=\"border:1px solid black; padding: 10px; text-align: center; background-color: #fadbd8 ;\">" + str(value) + "</td>")
+            elif i == 5:
+                if str(value) == "OK":
+                    file.write("<td style=\"border:1px solid black; padding: 10px; text-align: center; color: green;\">" + str(value) + "</td>")
+                else:
+                    file.write("<td style=\"border:1px solid black; padding: 10px; text-align: center; color: red;\">" + str(value) + "</td>")               
+            else:
+                file.write("<td style=\"border:1px solid black; padding: 10px; text-align: center;\">" + str(value) + "</td>")
         file.write("</tr>")
     file.write("</table>")
     file.write("</body>")
@@ -153,7 +166,7 @@ def main():
     # else:
     #     print("calling python script with: " + arg[1])
     #     create_report(arg[1])
-    create_report("01")
+    create_report("02")
 
 if __name__ == "__main__":
     main()
