@@ -1,0 +1,46 @@
+<modules>
+    <module>
+        <name>SWC_RTC</name>
+        <results>190, 0, 16, 135, 0, 12</results>
+    </module>
+    <module>
+        <name>Module_RTC_SIN</name>
+        <results>76, 0, 0, 76, 0, 0</results>
+    </module>
+    <module>
+        <name>Module_RTC_ABC</name>
+        <results>116, 0, 0, 68, 0, 0</results>
+    </module>	
+    <module>
+        <name>Module_RTC_DEF</name>
+        <results>18, 1, 0, 45, 5, 0</results>
+    </module>	
+    <module>
+        <name>Module_RTC_GHJ</name>
+        <results>44, 0, 12, 44, 0, 12</results>
+    </module>
+    <module>
+        <name>Module_RTC_KLM</name>
+        <results>11, 0, 0, 11, 0, 0</results>
+    </module>
+    <module>
+        <name>Module_RTC_OPR</name>
+        <results>8, 0, 0, 8, 0, 0</results>
+    </module>
+    <module>
+        <name>Module_RTC_QRT</name>
+        <results>120, 20, 5, 20, 4, 1</results>
+    </module>
+    <module>
+        <name>Module_RTC_TTY</name>
+        <results>68, 0, 0, 34, 0, 0</results>
+    </module>
+    <module>
+        <name>Module_RTC_ZOZ</name>
+        <results>33, 0, 0, 33, 0, 0</results>
+    </module>
+    <module>
+        <name>Module_RTC_SOUT</name>
+        <results>100, 10, 0, 100, 10, 0</results>
+    </module>	
+</modules>
