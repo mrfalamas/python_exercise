@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 import sys
 import os.path
+import xlsxwriter
 
 main_dict = {}
 
@@ -72,7 +73,10 @@ def create_excel(gr_dir, project):
 
     excel_dict = main_dict
     
+    workbook = xlsxwriter.Workbook('styled_output.xlsx')
+    worksheet = workbook.add_worksheet()
     
+    worksheet.write('A1', 'Name', bold)
     
     print(excel_dict)
 
