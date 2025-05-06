@@ -1,4 +1,4 @@
-"""Module providing a function printing python version."""
+"""Python implementation for 1 project, 1 test activity"""
 import os
 import pandas as pd
 import math
