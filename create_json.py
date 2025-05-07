@@ -7,7 +7,7 @@ import pandas as pd
 import math
 
 activity_dict = {}
-module_dict = {}
+
 py_dir = os.path.dirname(os.path.abspath(__file__))
 tst_dir = os.path.join(py_dir, "test_results")
 html_path = os.path.join(tst_dir, "output.html")
@@ -20,6 +20,12 @@ def from_html():
             contents = f.read()
         soup = BeautifulSoup(contents, "html.parser")
 
+        spans = soup.find_all("span")
+        for span in spans:
+            if span.text in ["Review of Test Specification","Review of Test Implementation","Non-Safety Tests (QM Requirements)","Safety Tests (ASIL Requirements)"]:
+                test_activity = span.text
+                if test_activity not in activity_dict.keys():
+                    activity_dict[test_activity] = {}
         table = soup.find("table")
         rows = table.find_all("tr")
 
@@ -28,20 +34,20 @@ def from_html():
             for i, cell in enumerate(cells):
                 module_name = cells[0].text
                 if i == 0:
-                    if module_name not in json_dict:
-                        json_dict[module_name] = []
+                    if module_name not in activity_dict:
+                        activity_dict[test_activity][module_name] = []
                 else:
                     if cell.text == "\u2705":
-                        json_dict[module_name].append("ok")
+                        activity_dict[test_activity][module_name].append("ok")
                     elif cell.text == "\u274c":
-                        json_dict[module_name].append("nok")
+                        activity_dict[test_activity][module_name].append("nok")
                     elif '🔄' in cell.text:
-                        json_dict[module_name].append("open")
+                        activity_dict[test_activity][module_name].append("open")
                     else:
-                        json_dict[module_name].append(cell.text)
+                        activity_dict[test_activity][module_name].append(cell.text)
 
         r = open(json_path, 'wb')
-        json_string = json.dumps(json_dict, indent=len(json_dict))
+        json_string = json.dumps(activity_dict, indent=4)
         r.write(json_string.encode('utf-8'))
         if os.path.isfile(json_path):
             print('File output.json was created')
@@ -82,11 +88,8 @@ def from_excel():
                         else:
                             activity_dict["Safety Tests (ASIL Requirements)"][module_name].append(str(elem))
 
-        print(activity_dict)
-        print(module_dict)
-
         r = open(json_path, 'wb')
-        json_string = json.dumps(activity_dict, indent=len(activity_dict))
+        json_string = json.dumps(activity_dict, indent=4)
         r.write(json_string.encode('utf-8'))
         if os.path.isfile(json_path):
             print('File output.json was created')
@@ -94,16 +97,15 @@ def from_excel():
         print('No output.json could be created')
 
 def main():
-    from_excel()
-    # arg = sys.argv
-    # if arg[1] == 'one':
-    #     print("creating output.json file, based on info from output.html, for a specific activity")
-    #     from_html()
-    # elif arg[1] == 'all':
-    #     print("creating output.json file, based on info from output.xlsx, for all test activities")
-    #     from_excel()
-    # else:
-    #     print("no output.json file is created")
+    arg = sys.argv
+    if arg[1] == 'one':
+        print("creating output.json file, based on info from output.html, for a specific activity")
+        from_html()
+    elif arg[1] == 'all':
+        print("creating output.json file, based on info from output.xlsx, for all test activities")
+        from_excel()
+    else:
+        print("no output.json file is created")
 
 if __name__ == "__main__":
     main()
