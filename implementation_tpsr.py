@@ -72,12 +72,10 @@ def create_excel(gr_dir, project):
     tpsr_path = os.path.join(tst_dir, "output.xlsx")
 
     excel_dict = main_dict
-    
     workbook = xlsxwriter.Workbook('styled_output.xlsx')
     worksheet = workbook.add_worksheet()
-    
     worksheet.write('A1', 'Name', bold)
-    
+
     print(excel_dict)
 
 def create_report(project):
