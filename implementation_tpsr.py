@@ -7,9 +7,21 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 import sys
 import os.path
-import xlsxwriter
+import os
+from openpyxl import load_workbook
+from openpyxl.utils import get_column_letter
+import copy
+import re
 
 main_dict = {}
+
+def shift_formula(formula, row_offset):
+    def replacer(match):
+        col = match.group(1)
+        row = int(match.group(2)) + row_offset
+        return f"{col}{row}"
+
+    return re.sub(r"([A-Z]+)(\d+)", replacer, formula)
 
 def append_from_json(gr_dir, project):
     json_file = os.path.join(gr_dir, project + "_01_review_test_spec.json")
@@ -71,12 +83,51 @@ def create_excel(gr_dir, project):
     tst_dir = os.path.join(py_dir, "test_results")
     tpsr_path = os.path.join(tst_dir, "output.xlsx")
 
-    excel_dict = main_dict
-    workbook = xlsxwriter.Workbook('styled_output.xlsx')
-    worksheet = workbook.add_worksheet()
-    worksheet.write('A1', 'Name', bold)
+    wb = load_workbook(tpsr_path)
+    ws = wb['Sheet1']
 
-    print(excel_dict)
+    template_row = 3
+    no_rows = len(main_dict.keys()) - 1
+    no_columns = 35
+
+    for i in range(no_rows):
+        target_row = template_row + i + 1
+        for col in range(no_columns):
+            source_cell = ws.cell(row=template_row, column=col+1)
+            target_cell = ws.cell(row=template_row + i + 1, column=col+1)
+
+            # Copy value or formula
+            original_formula = source_cell.value
+            if isinstance(original_formula, str) and original_formula.startswith("="):
+                target_cell.value = shift_formula(original_formula, target_row - template_row)
+            else:
+                target_cell.value = source_cell.value
+
+            target_cell._style = copy.copy(source_cell._style)
+            target_cell.number_format = source_cell.number_format
+
+
+    for i, each_row in enumerate(main_dict.items()):
+        ws.cell(row=i+3, column=1).value = str(each_row[0])
+
+    for m, key in enumerate(main_dict.keys()):
+        print(main_dict[key])
+        for n,elem in enumerate(main_dict[key]):
+            if n <= 2:
+                ws.cell(row=m+3, column=n+2).value = elem
+            elif (n > 2 and n <= 5):
+                ws.cell(row=m+3, column=n+5).value = elem
+            elif (n > 5 and n <= 8):
+                ws.cell(row=m+3, column=n+8).value = elem
+            elif (n > 8 and n <= 11):
+                ws.cell(row=m+3, column=n+10).value = elem
+            elif (n > 11 and n <= 14):
+                ws.cell(row=m+3, column=n+13).value = elem
+            elif (n > 14 and n <= 17):
+                ws.cell(row=m+3, column=n+15).value = elem
+    wb.save(tpsr_path)
+
+    print("Excel updated successfully")
 
 def create_report(project):
     py_dir = os.path.dirname(os.path.abspath(__file__))

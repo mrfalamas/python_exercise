@@ -1,7 +1,7 @@
 {
-    "SWC_VDSO": [12, 0, 2],
+    "SWC_VDSO": [12, 0, 0],
     "Module_VDSO_SIN": [12, 0, 2],
-    "Module_VDSO_PRE": [12, 0, 0],
+    "Module_VDSO_PRE": [12, 2, 0],
 	"Module_VDSO_CLC": [12, 0, 0],
 	"Module_VDSO_SOUT": [12, 3, 5]
 }
